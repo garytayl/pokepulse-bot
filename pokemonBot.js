@@ -1,21 +1,24 @@
 const { chromium } = require('playwright');
 
 async function runBot(productUrl) {
+  console.log("🚀 Launching browser...");
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
+  console.log("🌐 Navigating to:", productUrl);
   await page.goto(productUrl);
 
-  // Wait for product availability
-  await page.waitForSelector('button.add-to-cart', { timeout: 30000 });
+  console.log("🕵️ Looking for 'Add to Cart' button...");
+  const addToCartBtn = await page.getByRole('button', { name: 'Add to Cart' });
 
-  await page.click('button.add-to-cart');
-  await page.waitForTimeout(1000);
+  console.log("🖱️ Clicking 'Add to Cart'...");
+  await addToCartBtn.click();
 
+  console.log("🛒 Navigating to checkout...");
   await page.goto('https://www.pokemoncenter.com/checkout');
-  await page.waitForTimeout(5000); // Let it load
 
+  console.log("✅ Bot completed flow, closing browser.");
   await browser.close();
 }
-
+  
 module.exports = { runBot };

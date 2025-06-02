@@ -6,19 +6,25 @@ async function runBot(productUrl) {
   const page = await browser.newPage();
 
   console.log("🌐 Navigating to:", productUrl);
-  await page.goto(productUrl);
+  await page.goto(productUrl, { waitUntil: "domcontentloaded" });
 
-  console.log("🕵️ Looking for 'Add to Cart' button...");
-  const addToCartBtn = await page.getByRole('button', { name: 'Add to Cart' });
+  try {
+    console.log("🕵️ Waiting for button with class to show...");
+    await page.waitForSelector('button[class*="add-to-cart-button"]', { timeout: 30000 });
 
-  console.log("🖱️ Clicking 'Add to Cart'...");
-  await addToCartBtn.click();
+    console.log("🖱️ Clicking the add-to-cart button...");
+    await page.click('button[class*="add-to-cart-button"]');
 
-  console.log("🛒 Navigating to checkout...");
-  await page.goto('https://www.pokemoncenter.com/checkout');
+    console.log("🛒 Navigating to checkout...");
+    await page.goto('https://www.pokemoncenter.com/checkout');
 
-  console.log("✅ Bot completed flow, closing browser.");
-  await browser.close();
+    console.log("✅ Bot completed flow.");
+  } catch (err) {
+    console.error("❌ Failed to find or click button:", err.message);
+    throw new Error("Could not find Add to Cart button. Page may be blocking bot.");
+  } finally {
+    await browser.close();
+  }
 }
-  
+
 module.exports = { runBot };

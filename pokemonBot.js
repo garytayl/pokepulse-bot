@@ -1,7 +1,7 @@
 const { chromium } = require('playwright');
 
 async function runBot(productUrl) {
-  console.log("🚀 Launching browser...");
+  console.log("🚀 Launching browser (desktop mode)...");
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -9,19 +9,19 @@ async function runBot(productUrl) {
   await page.goto(productUrl, { waitUntil: "domcontentloaded" });
 
   try {
-    console.log("🕵️ Waiting for button with class to show...");
+    console.log("🕵️ Waiting for Add to Cart button...");
     await page.waitForSelector('button[class*="add-to-cart-button"]', { timeout: 30000 });
 
-    console.log("🖱️ Clicking the add-to-cart button...");
+    console.log("🖱️ Clicking Add to Cart...");
     await page.click('button[class*="add-to-cart-button"]');
 
-    console.log("🛒 Navigating to checkout...");
+    console.log("🛒 Going to checkout...");
     await page.goto('https://www.pokemoncenter.com/checkout');
 
-    console.log("✅ Bot completed flow.");
+    console.log("✅ Bot run complete. Closing browser.");
   } catch (err) {
-    console.error("❌ Failed to find or click button:", err.message);
-    throw new Error("Could not find Add to Cart button. Page may be blocking bot.");
+    console.error("❌ Failed to click Add to Cart:", err.message);
+    throw new Error("Add to Cart button not found or failed to click.");
   } finally {
     await browser.close();
   }

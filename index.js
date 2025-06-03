@@ -1,7 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const { startBot } = require('./botController');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { startBot } from './botController.js';
+
 
 const app = express();
 app.use(cors());

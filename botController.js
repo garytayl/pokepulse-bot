@@ -1,4 +1,4 @@
-const { runBot } = require('./pokemonBot');
+import { runBot } from './pokemonBot.js';
 
 async function startBot(productUrl) {
   console.log('Starting bot for:', productUrl);

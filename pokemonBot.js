@@ -1,4 +1,4 @@
-const { chromium } = require('playwright-core');
+import { chromium } from 'playwright';
 
 async function runBot(productUrl) {
   console.log("🚀 Launching browser (desktop mode)...");
